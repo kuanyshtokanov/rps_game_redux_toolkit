@@ -1,24 +1,21 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectCurrentGame } from '@store/gameSlice'
+
+import { selectCurrentGame } from '@store/tablesSlice'
+import Table from '@components/LobbyTable'
 import './index.css'
 
 const Lobby = ({ tables }) => {
   const dispatch = useDispatch();
-
-  console.log('lobby tables', tables)
   
   return (
-    tables.map((table,index)=>(
-      <div key={index}>
-        table #{index+1}
-        <button
-          onClick={() => dispatch(selectCurrentGame({currentGame:index, game: table}))}
-        >
-          Join
-        </button>  
-      </div>
-      
+    tables.tables.map((table,index)=>(
+      <Table
+        key={index}
+        table={table}
+        onTableClick={()=>dispatch(selectCurrentGame(index))}
+        progress={table.progress}
+      />
     ))
   )
 }

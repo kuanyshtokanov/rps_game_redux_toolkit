@@ -1,22 +1,30 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 
-import logo from './logo.svg';
+// import logo from './logo.svg';
 // import { Counter } from '@features/counter/Counter';
-import Header from '@components/header'
-import Lobby from '@features/lobby'
-import Game from '@features/game'
+import Header from '@components/Header'
+import Lobby from '@features/Lobby'
+import Game from '@features/Game'
 import { selecTables } from '@store/tablesSlice'
-import game from '@features/game'
 import './App.css';
 
 function App() {
   const tables = useSelector(selecTables);
   console.log('app tables', tables)
+  const { game, progress } = useSelector(
+    ({tables}) => {
+      return ({
+        game: tables.tables[tables.currentGame],
+        progress: tables.tables[tables.currentGame]?tables.tables[tables.currentGame].progress: undefined
+      })
+    }
+  )
+
   return (
     <div className="App">
       <div className="header">
-        <Header balance={123} />
+        <Header balance={tables.balance} />
       </div>
       <div className="content">
         <div className="left">
@@ -25,7 +33,10 @@ function App() {
           />
         </div>
         <div className="right">
-          <Game/>
+          <Game
+            game={game}
+            progress={progress}
+          />
         </div>
       </div>
       {/* <header className="App-header">
