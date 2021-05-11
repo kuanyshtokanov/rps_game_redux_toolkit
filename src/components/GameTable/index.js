@@ -3,44 +3,50 @@ import React, { useState } from 'react'
 import GameActions from '@components/GameActions'
 import Title from '@components/Title'
 import ProgressBar from '@components/ProgressBar'
+import OpponentHand from '@components/OpponentHand'
 import './index.css'
 
-const Table = ({ table, onChooseHand, progress }) => {
-  const [percent, setPercent] = useState(0)
-
-  console.log('table', table)
-
-  const handleIconClick = (val, gameId) => {
-    console.log('icon val', val)
-    console.log('icon gameId', gameId)
-    onChooseHand()
+const GameTable = ({ gameId, progress, status, bet, onChooseHand, hand, opponentHand }) => {
+  const handleIconClick = val => {
+    onChooseHand(val)
   }
   
   return (
     <div className="game-container">
       <div className="game-header">
-        <div className="game-header__left">
-          <Title
-            title={`table #${table.gameId}`}
-          />
-        </div>
+        <Title
+          title={`table #${gameId}`}
+        />
       </div>
       <div className="game-content">
         <div className="game-countdown">
-          <div>
-            <ProgressBar
-              percent={progress}
-            />
+          <ProgressBar
+            percent={progress}
+            status={status}
+          />
+        </div>
+        <div className="game-bet">
+          <div className="game-details">
+            <div className="table-stats">
+              <span className="bets-label">
+                BET
+              </span>
+              <span className="bets-val">
+                {bet}
+              </span>
+            </div>
+            <OpponentHand hand={opponentHand}/>
           </div>
         </div>
         <GameActions
-          game={table}
+          gameId={gameId}
           handleChooseHand={handleIconClick}
+          hand={hand}
+          status={status}
         />
-        
       </div>
     </div>
   )
 }
 
-export default Table
+export default GameTable

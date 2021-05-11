@@ -11,16 +11,20 @@ import './App.css';
 
 function App() {
   const tables = useSelector(selecTables);
-  console.log('app tables', tables)
-  const { game, progress } = useSelector(
+
+  const { game, progress, hand, opponentHand, status, bet } = useSelector(
     ({tables}) => {
       return ({
         game: tables.tables[tables.currentGame],
-        progress: tables.tables[tables.currentGame]?tables.tables[tables.currentGame].progress: undefined
+        progress: tables.tables[tables.currentGame]?tables.tables[tables.currentGame].progress: undefined,
+        hand: tables.tables[tables.currentGame]?tables.tables[tables.currentGame].selectedHand: undefined,
+        opponentHand: tables.tables[tables.currentGame]?tables.tables[tables.currentGame].opponentHand: undefined,
+        status: tables.tables[tables.currentGame]? tables.tables[tables.currentGame].status: undefined,
+        bet: tables.tables[tables.currentGame]? tables.tables[tables.currentGame].bet: 0,
       })
     }
   )
-
+  
   return (
     <div className="App">
       <div className="header">
@@ -34,8 +38,12 @@ function App() {
         </div>
         <div className="right">
           <Game
-            game={game}
+            gameId={game? game.gameId : null}
             progress={progress}
+            bet={bet}
+            hand={hand}
+            opponentHand={opponentHand}
+            status={status}
           />
         </div>
       </div>

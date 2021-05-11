@@ -1,12 +1,26 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import Table from '@components/GameTable'
-import { fetchGame, stepProgress } from '@store/tablesSlice'
+import GameTable from '@components/GameTable'
+import { fetchSelectedHand, stepProgress, selectHand, selectOpponentHand } from '@store/tablesSlice'
 import './index.css'
 
-const Game = ({ game, progress }) => {
+const Game = ({ gameId, progress, hand, bet, opponentHand, status }) => {
+  const [value, setValue] = useState(null)
   const dispatch = useDispatch()
+  console.log('Game status', status)
+
+  useEffect(() => {
+    const getRandomOption = () => {
+      return Math.floor(Math.random() * 3);
+    }
+    if (status === 'finished'){
+      const rand = getRandomOption()
+      // setValue(rand)
+      dispatch(selectOpponentHand({gameId: gameId, hand: rand}))
+    }
+    // return setValue(null)
+  }, [status])
 
   let timer = 0
 
@@ -30,17 +44,21 @@ const Game = ({ game, progress }) => {
   //   }
   // }
   
-
-  const chooseHand = () => {
-    dispatch(stepProgress(0.1))
+  const chooseHand = (val) => {
+    dispatch(stepProgress(gameId))
+    dispatch(selectHand({gameId: gameId, hand: val}))
   }
-  
+
   return (
-    (game && game.gameId !== null) ? (
-      <Table
-        table={game}
+    (gameId !== null) ? (
+      <GameTable
+        gameId={gameId}
         onChooseHand={chooseHand}
         progress={progress}
+        bet={bet}
+        hand={hand}
+        opponentHand={opponentHand}
+        status={status}
       />
     )
     : null

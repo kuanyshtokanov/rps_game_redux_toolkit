@@ -1,22 +1,44 @@
-import React, { useState } from 'react'
-import {IconContext} from "react-icons";
+import React, { useState,useEffect } from 'react'
 import { FaHandPaper, FaHandRock, FaHandScissors } from 'react-icons/fa';
 
-import Title from '@components/Title'
 import './index.css'
 
-const GameActions = ({ game, handleChooseHand }) => {
-  // const dispatch = useDispatch();
+const options = [
+  {
+    name: 'paper',
+    val: 1,
+    comp: FaHandPaper
+  },
+  {
+    name: 'rock',
+    val: 2,
+    comp: FaHandRock
+  },
+  {
+    name: 'scissors',
+    val: 3,
+    comp: FaHandScissors
+  },
+]
 
-  console.log('game actions', game)
-  
+const GameActions = ({ gameId, handleChooseHand, hand, status }) => {
+  const [isChosen, setIsChosen] = useState(null)
+  useEffect(() => {
+    setIsChosen(hand)
+  }, [hand])
+
+  const handleChooseAction = option => {
+    if(status !== 'finished'){
+      setIsChosen(option)
+      handleChooseHand(option, gameId)
+    }
+  }
+
   return (
     <div className="action-icons">
-      <IconContext.Provider value={{ className:"icons"}}>
-        <FaHandPaper onClick={() => handleChooseHand(1, game.gameId)}/>
-        <FaHandRock onClick={() => handleChooseHand(2, game.gameId)}/>
-        <FaHandScissors onClick={() => handleChooseHand(3, game.gameId)}/>
-      </IconContext.Provider>
+      {options.map((option, idx)=>(
+        <option.comp className={isChosen===option.val ? 'icon-selected' : 'icons'} key={idx} onClick={() => handleChooseAction(option.val)}/>
+      ))}
     </div>
   )
 }

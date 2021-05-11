@@ -5,15 +5,11 @@ import ProgressBar from '@components/ProgressBar'
 import GameActions from '@components/GameActions'
 import './index.css'
 
-const Table = ({ table, onTableClick, progress }) => {
-  const [percent, setPercent] = useState(0)
-  // const dispatch = useDispatch();
-
-  console.log('table', table)
+const Table = ({ table, onTableClick, onChooseHand, bet }) => {
+  console.log('lobby table', table)
 
   const handleIconClick = (val, gameId) => {
-    console.log('icon val', val)
-    console.log('icon gameId', gameId)
+    onChooseHand(gameId, val)
   }
   
   return (
@@ -25,21 +21,28 @@ const Table = ({ table, onTableClick, progress }) => {
           />
         </div>
         <div className="table-header__right">
-          <div className="table-bets">
-            <span>
-              bet
+          <div className="table-stats">
+            <span className="bets-label">
+              BET
+            </span>
+            <span className="bets-val">
+              {bet}
             </span>
           </div>
-          <div className="table-win">
-            <span>
-              win
+          <div className="table-stats">
+            <span className="bets-label">
+              WIN
+            </span>
+            <span className="bets-val">
+              {table.winAmount}
             </span>
           </div>
         </div>
       </div>
       <div className="table-countdown">
         <ProgressBar
-          percent={progress}
+          percent={table.progress}
+          status={table.status}
         />
       </div>
       <div className="table-content">
@@ -51,8 +54,10 @@ const Table = ({ table, onTableClick, progress }) => {
           </button>
         </div>
         <GameActions
-          game={table}
+          gameId={table.gameId}
           handleChooseHand={handleIconClick}
+          hand={table.selectedHand}
+          status={table.status}
         />
       </div>
     </div>

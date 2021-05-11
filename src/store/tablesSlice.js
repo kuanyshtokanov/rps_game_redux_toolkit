@@ -3,9 +3,13 @@ import { fetchTables } from '@helpers/tablesAPI';
 
 const game = {
   gameId: null,
-  bet: 0,
-  started: false,
+  isStarted: false,
   progress: 0,
+  winAmount: 0,
+  selectedHand: null,
+  opponentHand: null,
+  bet: 0,
+  status: 'waiting'
 }
 
 const initialState = {
@@ -43,14 +47,51 @@ export const tablesSlice = createSlice({
       state.value -= action.payload;
     },
     selectCurrentGame: (state, action) => {
-      console.log('log', action.payload)
       state.currentGame = action.payload;
     },
-    stepProgress: (state) => {
-      console.log('state', state.tables[state.currentGame])
-      if (state.tables[state.currentGame].progress < 1){
-        state.tables[state.currentGame].progress += 0.1
+    selectHand: (state, action) => {
+      if(state.tables[state.currentGame].status !== 'finished'){
+        state.tables[action.payload.gameId].selectedHand = action.payload.hand;
+        if(state.currentGame !== null && state.tables[state.currentGame].bet > 0){
+          tablesSlice.caseReducers.startGame(state, action);
+        }
       }
+    },
+    selectOpponentHand: (state, action) => {
+      state.tables[action.payload.gameId].opponentHand = action.payload.hand;
+    },
+    chooseBet: (state, action) => {
+      if (state.currentGame !== null && state.tables[state.currentGame].status !== 'finished'){
+        console.log('chooseBet', state)
+        state.tables[state.currentGame].bet = action.payload;
+        if(state.tables[state.currentGame].selectedHand !== null){
+          tablesSlice.caseReducers.startGame(state, action);
+        }
+      }
+    },
+    startGame: (state, action) => {
+      state.tables[state.currentGame].isStarted = true;
+      state.tables[state.currentGame].status = 'started'
+    },
+    stopGame: (state, action) => {
+      console.log('stop game')
+      state.tables[state.currentGame].isStarted = false;
+      state.tables[state.currentGame].status = 'finished'
+    },
+    stepProgress: (state, action) => {
+      if (state.tables[action.payload].progress <= 9){
+        if (state.tables[action.payload].progress < 9){
+          state.tables[action.payload].progress += 1
+        } else {
+          console.log('stop')
+          state.tables[action.payload].progress += 1
+          tablesSlice.caseReducers.stopGame(state, action);
+        }
+      }
+    },
+    resetCurGame: (state, action) => {
+      console.log('reset game')
+      state.tables[state.currentGame] = game;
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -63,7 +104,17 @@ export const tablesSlice = createSlice({
   },
 });
 
-export const { addToBalance, withdrawBalance, selectCurrentGame, stepProgress } = tablesSlice.actions;
+export const {
+  addToBalance,
+  withdrawBalance,
+  selectCurrentGame,
+  stepProgress,
+  selectHand,
+  startGame,
+  chooseBet,
+  stopGame,
+  resetCurGame,
+  selectOpponentHand } = tablesSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
@@ -72,6 +123,10 @@ export const selecTables = (state) => state.tables;
 
 export const fetchGame = (state) => {
   return state.tables.tables[state.currentGame];
+}
+
+export const fetchSelectedHand = (state) => {
+  return state.tables.tables[state.currentGame] ? state.tables.tables[state.currentGame].selectedHand : undefined;
 }
 
 export const fetchCurrentGame = (state) => state.tables.currentGame;

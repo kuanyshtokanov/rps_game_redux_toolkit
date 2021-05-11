@@ -16,11 +16,12 @@
   flex-basis: 50%;
 }
 
-.game-header__right {
-  flex-basis: 50%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+.game-details {
+  margin: 8px;
+}
+
+.computer-response {
+  margin: 16px;
 }
 
 .game-content {
