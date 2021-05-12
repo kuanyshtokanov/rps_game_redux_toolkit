@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Title, GameActions, ProgressBar, ScoreInfo} from 'react-rps-components'
 
 import { stepProgress, selectOpponentHand } from '@store/tablesSlice'
-import Title from '@components/Title'
-import ProgressBar from '@components/ProgressBar'
-import GameActions from '@components/GameActions'
-import ScoreInfo from '@components/ScoreInfo'
 import './index.css'
 
 const Table = ({ gameId, onTableClick, onChooseHand }) => {
@@ -88,7 +85,6 @@ const Table = ({ gameId, onTableClick, onChooseHand }) => {
       <div className="table-countdown">
         <ProgressBar
           percent={progress}
-          status={status}
         />
       </div>
       <div className="table-content">

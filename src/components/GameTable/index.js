@@ -1,17 +1,13 @@
 import React from 'react'
+import { Title, GameActions, ProgressBar, OpponentHand, ScoreInfo} from 'react-rps-components'
 
-import GameActions from '@components/GameActions'
-import Title from '@components/Title'
-import ProgressBar from '@components/ProgressBar'
-import OpponentHand from '@components/OpponentHand'
-import ScoreInfo from '@components/ScoreInfo'
 import './index.css'
 
 const GameTable = ({ gameId, progress, status, bet, onChooseHand, hand, opponentHand }) => {
   const handleIconClick = val => {
     onChooseHand(val)
   }
-  
+
   return (
     <div className="game-container">
       <div className="game-header">
@@ -23,7 +19,6 @@ const GameTable = ({ gameId, progress, status, bet, onChooseHand, hand, opponent
         <div className="game-countdown">
           <ProgressBar
             percent={progress}
-            status={status}
           />
         </div>
         <div className="game-bet">

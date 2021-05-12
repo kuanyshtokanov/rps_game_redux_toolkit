@@ -21,7 +21,6 @@ const Game = ({ gameId }) => {
   )
   
   const chooseHand = (val) => {
-    // dispatch(stepProgress(gameId))
     dispatch(selectHand({gameId: gameId, hand: val}))
   }
 
