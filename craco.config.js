@@ -6,6 +6,7 @@ module.exports = {
       '@features': path.resolve(__dirname, "src/features/"),
       '@helpers': path.resolve(__dirname, "src/helpers/"),
       '@store': path.resolve(__dirname, "src/store/"),
+      '@consts': path.resolve(__dirname, "src/consts/"),
     }
   }
 }

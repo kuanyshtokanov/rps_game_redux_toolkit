@@ -5,6 +5,7 @@ import { stepProgress, selectOpponentHand } from '@store/tablesSlice'
 import Title from '@components/Title'
 import ProgressBar from '@components/ProgressBar'
 import GameActions from '@components/GameActions'
+import ScoreInfo from '@components/ScoreInfo'
 import './index.css'
 
 const Table = ({ gameId, onTableClick, onChooseHand }) => {
@@ -25,12 +26,13 @@ const Table = ({ gameId, onTableClick, onChooseHand }) => {
 
   useEffect(() => {
     const getRandomOption = () => {
-      return Math.floor(Math.random() * 3);
+      return Math.floor(Math.random() * 3) + 1
     }
     if (status === 'finished'){
       const rand = getRandomOption()
       dispatch(selectOpponentHand({gameId: gameId, hand: rand}))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status])
 
   const handleIconClick = (val, gameId) => {
@@ -52,6 +54,7 @@ const Table = ({ gameId, onTableClick, onChooseHand }) => {
       setTimer(0)
     }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, progress])
 
   const countDown = () => {
@@ -71,14 +74,7 @@ const Table = ({ gameId, onTableClick, onChooseHand }) => {
           />
         </div>
         <div className="table-header__right">
-          <div className="table-stats">
-            <span className="bets-label">
-              BET
-            </span>
-            <span className="bets-val">
-              {bet}
-            </span>
-          </div>
+          <ScoreInfo label={'BET'} value={bet}/>
           <div className="table-stats">
             <span className="bets-label">
               WIN

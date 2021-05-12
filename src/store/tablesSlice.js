@@ -35,16 +35,30 @@ export const incrementAsync = createAsyncThunk(
   }
 );
 
+const calculateWinner = (userHand, opponentHand) => {
+  let draw, userWinner = false
+  if (userHand === opponentHand) {
+    draw = true
+  } else if (
+    (userHand === 2 && opponentHand === 3) ||
+    (userHand === 3 && opponentHand === 1) ||
+    (userHand === 1 && opponentHand === 2)
+  ) {
+    userWinner = true
+  }
+  return [draw, userWinner]
+}
+
 export const tablesSlice = createSlice({
   name: 'tables',
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     addToBalance:  (state, action) => {
-      state.value += action.payload;
+      state.balance += action.payload;
     },
     withdrawBalance:  (state, action) => {
-      state.value -= action.payload;
+      state.balance -= action.payload;
     },
     selectCurrentGame: (state, action) => {
       state.currentGame = action.payload;
@@ -59,10 +73,13 @@ export const tablesSlice = createSlice({
     },
     selectOpponentHand: (state, action) => {
       state.tables[action.payload.gameId].opponentHand = action.payload.hand;
+      const [draw, userWinner] = calculateWinner(state.tables[action.payload.gameId].selectedHand, state.tables[action.payload.gameId].opponentHand)
+      const winAmount = draw ? 0 : userWinner ? state.tables[action.payload.gameId].bet : -state.tables[action.payload.gameId].bet
+      state.tables[action.payload.gameId].winAmount = winAmount
+      tablesSlice.caseReducers.addToBalance(state, {payload: winAmount});
     },
     chooseBet: (state, action) => {
       if (state.currentGame !== null && state.tables[state.currentGame].status !== 'finished'){
-        console.log('chooseBet', state)
         state.tables[state.currentGame].bet = action.payload;
         if(state.tables[state.currentGame].selectedHand !== null){
           tablesSlice.caseReducers.startGame(state, action);
@@ -74,7 +91,6 @@ export const tablesSlice = createSlice({
       state.tables[state.currentGame].status = 'started'
     },
     stopGame: (state, action) => {
-      console.log('stop game')
       state.tables[action.payload].isStarted = false;
       state.tables[action.payload].status = 'finished'
     },
@@ -83,14 +99,12 @@ export const tablesSlice = createSlice({
         if (state.tables[action.payload].progress < 9){
           state.tables[action.payload].progress += 1
         } else {
-          console.log('stop')
           state.tables[action.payload].progress += 1
           tablesSlice.caseReducers.stopGame(state, action);
         }
       }
     },
     resetCurGame: (state, action) => {
-      console.log('reset game')
       state.tables[state.currentGame] = game;
     },
   },

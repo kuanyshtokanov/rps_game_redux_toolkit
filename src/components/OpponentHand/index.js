@@ -1,31 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { FaHandPaper, FaHandRock, FaHandScissors } from 'react-icons/fa'
 
+import { options } from '@consts/options'
 import './index.css'
-
-const options = [
-  {
-    name: 'paper',
-    val: 1,
-    comp: FaHandPaper
-  },
-  {
-    name: 'rock',
-    val: 2,
-    comp: FaHandRock
-  },
-  {
-    name: 'scissors',
-    val: 3,
-    comp: FaHandScissors
-  },
-]
 
 const OpponentHand = ({ hand }) => {
   const [option, setOption] = useState(null)
 
   useEffect(() => {
-    setOption(options.find((option, idx)=>option.val===hand))
+    setOption(options.find(option=>option.val===hand))
   }, [hand])
 
   return (

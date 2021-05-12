@@ -4,6 +4,7 @@ import GameActions from '@components/GameActions'
 import Title from '@components/Title'
 import ProgressBar from '@components/ProgressBar'
 import OpponentHand from '@components/OpponentHand'
+import ScoreInfo from '@components/ScoreInfo'
 import './index.css'
 
 const GameTable = ({ gameId, progress, status, bet, onChooseHand, hand, opponentHand }) => {
@@ -27,14 +28,7 @@ const GameTable = ({ gameId, progress, status, bet, onChooseHand, hand, opponent
         </div>
         <div className="game-bet">
           <div className="game-details">
-            <div className="table-stats">
-              <span className="bets-label">
-                BET
-              </span>
-              <span className="bets-val">
-                {bet}
-              </span>
-            </div>
+            <ScoreInfo label={'BET'} value={bet}/>
             <OpponentHand hand={opponentHand}/>
           </div>
         </div>
