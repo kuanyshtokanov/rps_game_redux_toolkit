@@ -22,16 +22,21 @@ const options = [
 ]
 
 const OpponentHand = ({ hand }) => {
-  const Option = options.find((option, idx)=>option.val===hand)
+  const [option, setOption] = useState(null)
+
+  useEffect(() => {
+    setOption(options.find((option, idx)=>option.val===hand))
+  }, [hand])
+
   return (
     <div className="computer-response">
-      {Option && Option.comp && (
+      {option && option.comp && (
         <>
         <span>
           Computer:
         </span>
         <div className="computer-option">
-          <Option.comp className='response-icon'/>
+          <option.comp className='response-icon'/>
         </div>
         </>
       )}

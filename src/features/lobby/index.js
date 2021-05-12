@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
+import { useDispatch } from 'react-redux'
 
-import { selectCurrentGame, stepProgress, selectHand, chooseBet } from '@store/tablesSlice'
-// import { chooseBet } from '@store/betsSlice'
+import { selectCurrentGame, selectHand, chooseBet } from '@store/tablesSlice'
 import LobbyTable from '@components/LobbyTable'
 import Chips from '@components/Chips'
 import './index.css'
@@ -11,15 +10,11 @@ const Lobby = ({ tables }) => {
   const dispatch = useDispatch();
 
   const chooseHand = (gameId, hand) => {
-    console.log('gameId', gameId)
-    console.log('hand', hand)
-    dispatch(stepProgress(gameId))
     dispatch(selectHand({gameId: gameId, hand: hand}))
   }
 
   const handleChooseBet = val => {
     dispatch(chooseBet(val))
-    // dispatch(startGame())
   }
   
   return (
@@ -28,11 +23,9 @@ const Lobby = ({ tables }) => {
         {tables.tables.map((table,index)=>(
           <LobbyTable
             key={index}
-            table={table}
+            gameId={table.gameId}
             onTableClick={()=>dispatch(selectCurrentGame(index))}
             onChooseHand={chooseHand}
-            progress={table.progress}
-            bet={table.bet}
           />
         ))}
       </div>

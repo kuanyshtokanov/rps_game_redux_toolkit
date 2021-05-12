@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import GameActions from '@components/GameActions'
 import Title from '@components/Title'

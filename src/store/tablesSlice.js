@@ -50,7 +50,7 @@ export const tablesSlice = createSlice({
       state.currentGame = action.payload;
     },
     selectHand: (state, action) => {
-      if(state.tables[state.currentGame].status !== 'finished'){
+      if(state.currentGame !== null && state.tables[state.currentGame].status !== 'finished'){
         state.tables[action.payload.gameId].selectedHand = action.payload.hand;
         if(state.currentGame !== null && state.tables[state.currentGame].bet > 0){
           tablesSlice.caseReducers.startGame(state, action);
@@ -75,8 +75,8 @@ export const tablesSlice = createSlice({
     },
     stopGame: (state, action) => {
       console.log('stop game')
-      state.tables[state.currentGame].isStarted = false;
-      state.tables[state.currentGame].status = 'finished'
+      state.tables[action.payload].isStarted = false;
+      state.tables[action.payload].status = 'finished'
     },
     stepProgress: (state, action) => {
       if (state.tables[action.payload].progress <= 9){
